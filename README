@@ -1,0 +1,25 @@
+#========================================================================================#
+#========================================================================================#
+# SCANS GENOMIC : 
+
+  # - ACP Global on all chromosome 
+  # - ACP on sliding windows
+  # - ACP on SNP range
+  # - FST on sliding windows
+  # - Global FST on sliding windows
+  # - FST by SNP by chromosome
+  # - PCadapt 
+  # - Fixed genotype by group in SW
+  # - Diversity (theta and TD) 
+  # - GLOBAL SFS by Chromosome
+  # - SFS in Sliding Windows: Euclidian distance of SFS in sliding windows vs global SFS on chromosome
+  # - LD : to do
+  # 
+
+# Aim : Run all scan independently on each chr 
+
+# Authors : Stefano Mona , Elise Gay, Romuald Laso-Jadart (MNHN - EPHE)
+#           2023
+#	Please inform the authors before sharing
+#========================================================================================#
+#========================================================================================#
