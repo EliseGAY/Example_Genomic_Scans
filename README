@@ -23,3 +23,154 @@
 #	Please inform the authors before sharing
 #========================================================================================#
 #========================================================================================#
+#============================#
+#============================#
+# ------ Load libraries ----
+#============================#
+#============================#
+
+library(bedr)
+library(qvalue)
+library(vcfR)
+library(rlist)
+library(pegas)
+library(ggplot2)
+library(adegenet)
+library(hierfstat)
+library(reshape2)
+library(pcadapt)
+library(ggrepel)
+library(gridExtra)
+library(ggbreak)
+library(IRanges)
+library(stringr)
+library(PopGenome)
+library(basetheme)
+library(network)
+
+# Stefano Mona libraries housemade
+#----------------------------------#
+source("R_functions/libreria_filtri_VCF_e_SFS_unfolded.r")
+
+# function to apply filters on genotype and depth
+#--------------------------------------------------#
+source("R_functions/fonction_filtre_cover.R")
+source("R_functions/Filter_Ref.R")
+source("R_functions/Filter_Het.R")
+source("R_functions/Filter_Hom_ref.R")
+source("R_functions/Filter_Na.R")
+
+# get/set dir
+#---------------#
+# get directories where VCF needed for genomic scan are stored
+dir_data="data/"
+dir(dir_data)
+
+# create folder for each scan (comment line if it is a re-run)
+# check your current directory
+getwd()
+
+dir.create("Sliding_div")
+dir.create("SlidingSFS")
+dir.create("Sliding_PCA")
+dir.create("SlidingFst")
+dir.create("FstBySNP")
+dir.create("Sliding_global_FST")
+dir.create("pcadapt")
+dir.create("freq_genotype/")
+
+# Genomic scan run on each chromosome (1 vcf by chromosomes are needed)
+# For each index : 
+# - Needed input VCF, position vector and table of metadata about samples and populations are read in each part
+# - Result table by windows are stored in corresponding folder
+# - Plot are made for each chromosome and stored in PDF in corresponding folder
+
+#========================================#
+#========================================#
+# ------ Load Metadata and variable ----
+#========================================#
+#========================================#
+
+# Chr list : to run genomic scan
+#---------#
+chr_list=c("SUPER_10", "SUPER_14")
+
+
+# Metadata pop
+#--------------#
+
+# the pop table has to be ordered in the same way as all the VCF header
+#'''
+#samples	pop	
+#sample_1	pop1
+#sample_2	pop1
+#sample_3	pop1
+#sample_4	pop2
+#sample_5	pop2
+#'''
+
+table_pop=read.table("metadata/Samples_table.txt", header = TRUE, row.names = 1)
+table_pop
+
+samples=row.names(table_pop)
+samples
+
+pop=table_pop$pop
+pop
+
+sex=table_pop$sex
+sex
+
+pop1=row.names(as.data.frame(table_pop[which(table_pop$pop == "POP1"),]))
+pop1
+pop2=row.names(as.data.frame(table_pop[which(table_pop$pop == "POP2"),]))
+pop2
+pop3=row.names(as.data.frame(table_pop[which(table_pop$pop == "POP3"),]))
+pop3
+pop4=row.names(as.data.frame(table_pop[which(table_pop$pop == "POP4"),]))
+pop4
+
+lista_pop<-list(pop1,pop2,pop3,pop4)
+names(lista_pop)=c("pop1","pop2","pop3","pop4")
+
+# for div computing 
+lista_pop_all=list(pop1,pop2,pop3,pop4,c(pop1,pop2,pop3,pop4))
+names(lista_pop_all)=c("pop1","pop2","pop3","pop4","pop1+pop2+pop3+pop4")
+
+# get all genes coordinates in a bed file :
+#--------------------------------------------#
+gene=read.table("metadata/Genes.name.bed", header = TRUE)
+
+# prefix of vcf to read depending on filters (according to the exact name of your VCF in yout local folder)
+# Only put the 'base name' , the loop in each scan will fill the chr name 
+#-----------------------------------------------------------------------------------------------------------#
+VCF_0="_TAG_Flowqual_Noindels_Norepeat_SNP_21IND_DP10_50_10_200_Na0_60.vcf.gz"
+VCF_20="_TAG_Flowqual_Noindels_Norepeat_SNP_21IND_DP10_50_10_200_Na20_60.vcf.gz"
+VCF_20_MAF005="_TAG_Flowqual_Noindels_Norepeat_SNP_21IND_DP10_50_10_200_Na20_60_MAF005.vcf.gz"
+VCF_20_MAF005_unzip="_TAG_Flowqual_Noindels_Norepeat_SNP_21IND_DP10_50_10_200_Na20_60_MAF005.vcf"
+position_20_MAF ="_TAG_Flowqual_Noindels_Norepeat_SNP_21IND_DP10_50_10_200_Na20_60_MAF005.positions"
+position_all="_TAG_Flowqual_Noindels_Norepeat_SNP_21ind.positions"
+position_20="_TAG_Flowqual_Noindels_Norepeat_SNP_21IND_DP10_50_10_200_Na20_60.positions"
+position_0="_TAG_Flowqual_Noindels_Norepeat_SNP_21IND_DP10_50_10_200_Na0_60.positions"
+BED_20_MAF005="_TAG_Flowqual_Noindels_Norepeat_SNP_21IND_DP10_50_10_200_Na20_60_MAF005.bed.bed"
+
+# prepare basename for variable save in R env
+base_name_20="VCF_F_20Na"
+base_name_0="VCF_F_0Na"
+base_name_position="VCF_F.position"
+base_name_position_0="VCF_0.position"
+base_name_position_20_MAF="VCF_20_MAF.position"
+base_name_plink="Bed_Na20_MAF005"
+base_name_MAF="VCF_F_20Na_MAF005"
+base_name_position_20="VCF_20.position"
+
+# read chr table (needed several time to plot index along chr)
+# '''
+# Chr		length
+# SUPER_1	274107945
+# SUPER_2	239769335
+# SUPER_3	233268383
+# SUPER_4	205643877
+# ...
+# '''
+table_chr=read.table("metadata/table_chr_length.txt", header = TRUE)
