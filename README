@@ -104,4 +104,4 @@ source("R_functions/Filter_Na.R")
 
 # output :
 #----------#
-On folder with table and plot for each scans run
+On folder with table and plot for each scan run
