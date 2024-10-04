@@ -51,7 +51,3 @@ Filters_na_Ind_Pos<-function(vfc,rate_na_max_POS,rate_na_max_Ind){
 	
 	return(vcf_filtered_na)
 }
-
-#------------#
-# Example :
-#------------#
