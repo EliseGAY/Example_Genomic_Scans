@@ -116,7 +116,7 @@ source("R_functions/libreria_filtri_VCF_e_SFS_unfolded.r")
 Filter functions:
 ```r
 # Add the other repo as a submodule 
-git submodule add https://github.com/ R_functions
+git submodule add [https://github.com/ R_functions](https://github.com/EliseGAY/WGS-Variant-Calling-pipeline/tree/main/6_DP_NA_Filters/R_functions)
 
 # Initialize & pull the submodule
 git submodule update --init --recursive
