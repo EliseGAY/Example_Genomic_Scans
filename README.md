@@ -103,21 +103,24 @@ library(stringr)
 library(PopGenome)
 library(basetheme)
 library(network)
-
+```r
 Custom R Functions
 
 Housemade libraries by Stefano Mona:
 
+```r
 source("R_functions/libreria_filtri_VCF_e_SFS_unfolded.r")
+```r
 
 Filter functions:
-
+```r
 source("R_functions/fonction_filtre_cover.R")
 source("R_functions/Filter_Ref.R")
 source("R_functions/Filter_Het.R")
 source("R_functions/Filter_Hom_ref.R")
 source("R_functions/Filter_Na.R")
+```r
 
 Output
 
-    One folder with tables and plots for each scan run.
+One folder with tables and plots for each scan run.
