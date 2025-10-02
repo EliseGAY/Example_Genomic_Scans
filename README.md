@@ -115,11 +115,11 @@ source("R_functions/libreria_filtri_VCF_e_SFS_unfolded.r")
 
 Filter functions:
 ```r
-source("R_functions/fonction_filtre_cover.R")
-source("R_functions/Filter_Ref.R")
-source("R_functions/Filter_Het.R")
-source("R_functions/Filter_Hom_ref.R")
-source("R_functions/Filter_Na.R")
+# Add the other repo as a submodule 
+git submodule add https://github.com/ R_functions
+
+# Initialize & pull the submodule
+git submodule update --init --recursive
 ```
 
 Output
