@@ -103,7 +103,8 @@ library(stringr)
 library(PopGenome)
 library(basetheme)
 library(network)
-```r
+```
+
 Custom R Functions
 
 Housemade libraries by Stefano Mona:
