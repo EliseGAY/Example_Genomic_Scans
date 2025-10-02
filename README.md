@@ -67,3 +67,57 @@ Chr length
 SUPER_1 274107945
 SUPER_2 239769335
 SUPER_3 233268383
+
+
+---
+
+## Methods
+
+Genomic scans are run on each chromosome (1 VCF per chromosome is needed).  
+
+For each index:
+- Input VCF, position vector, and sample/population metadata are read.  
+- Result tables (by windows) are stored in the corresponding folder.  
+- Plots are generated for each chromosome and saved as PDFs in the corresponding folder.  
+
+---
+
+## Required Libraries
+
+```r
+library(bedr)
+library(qvalue)
+library(vcfR)
+library(rlist)
+library(pegas)
+library(ggplot2)
+library(adegenet)
+library(hierfstat)
+library(reshape2)
+library(pcadapt)
+library(ggrepel)
+library(gridExtra)
+library(ggbreak)
+library(IRanges)
+library(stringr)
+library(PopGenome)
+library(basetheme)
+library(network)
+
+Custom R Functions
+
+Housemade libraries by Stefano Mona:
+
+source("R_functions/libreria_filtri_VCF_e_SFS_unfolded.r")
+
+Filter functions:
+
+source("R_functions/fonction_filtre_cover.R")
+source("R_functions/Filter_Ref.R")
+source("R_functions/Filter_Het.R")
+source("R_functions/Filter_Hom_ref.R")
+source("R_functions/Filter_Na.R")
+
+Output
+
+    One folder with tables and plots for each scan run.
