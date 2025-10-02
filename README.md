@@ -111,7 +111,7 @@ Housemade libraries by Stefano Mona:
 
 ```r
 source("R_functions/libreria_filtri_VCF_e_SFS_unfolded.r")
-```r
+```
 
 Filter functions:
 ```r
@@ -120,7 +120,7 @@ source("R_functions/Filter_Ref.R")
 source("R_functions/Filter_Het.R")
 source("R_functions/Filter_Hom_ref.R")
 source("R_functions/Filter_Na.R")
-```r
+```
 
 Output
 
